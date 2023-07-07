@@ -5,11 +5,15 @@ a {
 
 body {
     justify-content: space-between;
-    background-color: rgb(60, 115, 111);
+    /*background-color: rgb(60, 115, 111);*/
+    background: linear-gradient(45deg, #59918d, #08514d);
 }
 
 h1 {
-    color: rgb(9, 1, 32);
+    /*color: rgb(9, 1, 32);*/
+    background: linear-gradient(#090120, #053564, #040929);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
     font-size: 50px;
     text-align: center;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
