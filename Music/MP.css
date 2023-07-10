@@ -43,3 +43,15 @@ h2 {
     position: relative;
 
 }
+.bottom{
+    position: sticky;
+    height: 130px;
+    background-color: black;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#myProgressBar{
+    width: 80vw;
+}
