@@ -1,5 +1,17 @@
-// Create audio object (will handle missing files gracefully)
-const music = new Audio('audio/1.mp3');
+// Create audio object (will handle missing files gracefully) - Browser only
+let music;
+if (typeof Audio !== 'undefined') {
+    music = new Audio('audio/1.mp3');
+} else {
+    // Mock audio object for Node.js environment
+    music = {
+        addEventListener: () => {},
+        play: () => Promise.resolve(),
+        pause: () => {},
+        currentTime: 0,
+        duration: 0
+    };
+}
 
 // Simple state tracking for visual mode
 let isCurrentlyPlaying = false;
@@ -60,7 +72,7 @@ const serverConfig = {
                 app.listen(PORT, () => {
                     console.log(`🎵 MSW Music Website running on http://localhost:${PORT}`);
                     console.log('✅ Security headers configured properly');
-                    console.log('✅ Content-Security-Policy header set (replaces X-Frame-Options)`);
+                    console.log('✅ Content-Security-Policy header set (replaces X-Frame-Options)');
                 });
                 
                 return app;
@@ -226,10 +238,13 @@ const songs = [
 ];
 
 // Initialize song items with poster and song name when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
-    initializeSongItems();
-    initializeEventListeners();
-});
+// Browser environment only
+if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeSongItems();
+        initializeEventListeners();
+    });
+}
 
 // Initialize song items with poster and song name
 function initializeSongItems() {
@@ -484,22 +499,24 @@ function initializeSliderAccessibility() {
     }
 }
 
-// Listen for music events
-music.addEventListener('ended', () => {
-    isCurrentlyPlaying = false;
-    updatePauseUI();
-});
+// Browser-specific code execution
+if (typeof document !== 'undefined') {
+    // Listen for music events
+    music.addEventListener('ended', () => {
+        isCurrentlyPlaying = false;
+        updatePauseUI();
+    });
 
-music.addEventListener('error', () => {
-    console.log('Audio file not found - continuing in visual mode');
-});
+    music.addEventListener('error', () => {
+        console.log('Audio file not found - continuing in visual mode');
+    });
 
-// Progress Bar Functionality (Visual Simulation)
-let seek = document.getElementById('seek');
-let bar2 = document.getElementById('bar2');
-let dot = document.querySelector('.bar .dot');
-let currentStart = document.querySelector('.currentStart');
-let currentEnd = document.querySelector('.currentEnd');
+    // Progress Bar Functionality (Visual Simulation)
+    let seek = document.getElementById('seek');
+    let bar2 = document.getElementById('bar2');
+    let dot = document.querySelector('.bar .dot');
+    let currentStart = document.querySelector('.currentStart');
+    let currentEnd = document.querySelector('.currentEnd');
 
 // Update progress bar visually
 function updateProgressBar() {
@@ -654,6 +671,8 @@ function updateVolumeIcon(volume) {
 
 // Initialize volume icon
 updateVolumeIcon(vol_control ? vol_control.value : 30);
+
+} // End of browser-specific code
 
 /*
 Example package.json dependencies needed for server functionality:
