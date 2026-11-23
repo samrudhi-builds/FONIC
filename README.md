@@ -11,10 +11,10 @@ The project focuses on creating a visually appealing and interactive music playe
 - **Modern UI Design**: Clean, glassmorphism-inspired interface with gradient themes
 - **Interactive Music Player**: Visual music player controls with simulated playback
 - **Responsive Layout**: Mobile-first design ensuring compatibility across all devices
-- **Playlist Management**: Interactive playlist interface with visual feedback
+- **Playlist**: Select a song to load its title and artwork in the simulated player
 - **Song Library**: Organized collection of songs with metadata and artwork
 - **Artist Profiles**: Featured artists section with professional imagery
-- **Search Interface**: Visual search functionality and navigation
+- **Search and navigation mockups**: Display-only elements in the demo
 - **Dynamic Content**: Horizontal scrolling carousels for songs and artists
 
 ## Technologies Used
@@ -25,7 +25,13 @@ The project focuses on creating a visually appealing and interactive music playe
 - **Bootstrap Icons**: Professional iconography
 - **Google Fonts**: Modern typography
 
-- **Live Demo**: [https://elysian0987.github.io/MSW/](https://elysian0987.github.io/MSW/)
+## Live Demo
+
+[Open FONIC on GitHub Pages](https://samrudhi-builds.github.io/FONIC/)
+
+## Run Locally
+
+Open `index.html` in a browser from the project folder. Bootstrap Icons and Google Fonts load from their public CDNs.
  
 ## Learning Outcomes
 
