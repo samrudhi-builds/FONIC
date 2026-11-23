@@ -1,30 +1,3 @@
-// Create audio object (will handle missing files gracefully) - Browser only
-// COMMENTED OUT FOR GITHUB PAGES - Uncomment if you add audio files
-/*
-let music;
-if (typeof Audio !== 'undefined') {
-    music = new Audio('audio/1.mp3');
-} else {
-    // Mock audio object for Node.js environment
-    music = {
-        addEventListener: () => {},
-        play: () => Promise.resolve(),
-        pause: () => {},
-        currentTime: 0,
-        duration: 0
-    };
-}
-*/
-
-// GitHub Pages Compatible - Mock audio object
-let music = {
-    addEventListener: () => {},
-    play: () => Promise.resolve(),
-    pause: () => {},
-    currentTime: 0,
-    duration: 0
-};
-
 // Simple state tracking for visual mode
 let isCurrentlyPlaying = false;
 
@@ -33,76 +6,6 @@ let currentTime = 0;
 let totalDuration = 180; // 3 minutes default duration
 let playbackInterval;
 let playbackSpeed = 1000; // Update every 1 second
-
-// SERVER FUNCTIONALITY - COMMENTED OUT FOR GITHUB PAGES
-// Uncomment this entire section if you want to run with Node.js/Express
-/*
-const serverConfig = {
-    // server.js - Example Node.js/Express server configuration
-    // Run with: node script.js
-    
-    initializeServer: function() {
-        // Only run server code if in Node.js environment
-        if (typeof require !== 'undefined') {
-            try {
-                const express = require('express');
-                const path = require('path');
-                const app = express();
-                const PORT = process.env.PORT || 3000;
-
-                // Security middleware for proper headers
-                app.use((req, res, next) => {
-                    // Content Security Policy (replaces X-Frame-Options)
-                    res.setHeader('Content-Security-Policy', 
-                        "default-src 'self'; " +
-                        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; " +
-                        "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; " +
-                        "img-src 'self' data:; " +
-                        "script-src 'self' 'unsafe-inline'; " +
-                        "frame-ancestors 'self';"
-                    );
-                    
-                    // Additional security headers
-                    res.setHeader('X-Content-Type-Options', 'nosniff');
-                    res.setHeader('X-XSS-Protection', '1; mode=block');
-                    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-                    
-                    // Remove X-Frame-Options if it exists (CSP takes precedence)
-                    res.removeHeader('X-Frame-Options');
-                    
-                    next();
-                });
-
-                // Serve static files from current directory
-                app.use(express.static(path.join(__dirname)));
-
-                // Route for the main page
-                app.get('/', (req, res) => {
-                    res.sendFile(path.join(__dirname, 'Final.html'));
-                });
-
-                // Start server
-                app.listen(PORT, () => {
-                    console.log(`🎵 MSW Music Website running on http://localhost:${PORT}`);
-                    console.log('✅ Security headers configured properly');
-                    console.log('✅ Content-Security-Policy header set (replaces X-Frame-Options)');
-                });
-                
-                return app;
-            } catch (error) {
-                console.log('Express not available - running in browser mode only');
-                return null;
-            }
-        }
-        return null;
-    }
-};
-
-// Initialize server if in Node.js environment
-if (typeof window === 'undefined' && typeof require !== 'undefined') {
-    serverConfig.initializeServer();
-}
-*/
 
 const songs = [
     {
@@ -262,13 +165,36 @@ if (typeof document !== 'undefined') {
 
 // Initialize song items with poster and song name
 function initializeSongItems() {
-    Array.from(document.getElementsByClassName('songItem')).forEach((e, i) => {
-        if (songs[i]) {
-            const img = e.getElementsByTagName('img')[0];
-            const h5 = e.getElementsByTagName('h5')[0];
-            if (img) img.src = songs[i].poster;
-            if (h5) h5.innerHTML = songs[i].songName;
+    document.querySelectorAll('.songItem').forEach((card, index) => {
+        const song = songs[index];
+        if (!song) return;
+
+        const image = card.querySelector('img');
+        const heading = card.querySelector('h5');
+        if (image) {
+            image.src = song.poster;
+            image.alt = '';
         }
+        if (heading) heading.innerHTML = song.songName;
+
+        const playIcon = card.querySelector('.playListPlay');
+        if (!playIcon) return;
+
+        playIcon.setAttribute('role', 'button');
+        playIcon.tabIndex = 0;
+        const label = heading ? heading.textContent.trim().replace(/\s+/g, ' ') : 'track';
+        playIcon.setAttribute('aria-label', 'Play ' + label);
+        playIcon.addEventListener('click', () => {
+            pauseMusic();
+            loadSong(song);
+            startMusic();
+        });
+        playIcon.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                playIcon.click();
+            }
+        });
     });
 }
 
@@ -309,9 +235,7 @@ function initializeEventListeners() {
     // Initialize scroll functionality
     initializeScrollFunctionality();
     
-    // Initialize playlist functionality
-    initializePlaylistFunctionality();
-    
+
     // Initialize follow button
     initializeFollowButton();
     
@@ -437,42 +361,17 @@ function initializeScrollFunctionality() {
     }
 }
 
-// Initialize playlist functionality
-function initializePlaylistFunctionality() {
-    let index = 0;
-    let poster_master_play = document.getElementById('poster_master_play');
-    let title = document.getElementById('title');
-    
-    Array.from(document.getElementsByClassName('playListPlay')).forEach((e) => {
-        e.addEventListener('click', () => {
-            index = e.target.id;
-            
-            // Reset playback for new song
-            pauseMusic();
-            currentTime = 0;
-            totalDuration = Math.floor(Math.random() * 180) + 120; // Random 2-5 minutes
-            updateProgressBar();
-            updateTimeDisplays();
-            
-            // Update poster in master play section
-            if (poster_master_play) {
-                poster_master_play.src = `img/Music/${index}.jpg`;
-            }
-            
-            // Start the new song
-            startMusic();
+// Use the same track details in the player and on the song card.
+function loadSong(song) {
+    const poster = document.getElementById('poster_master_play');
+    const title = document.getElementById('title');
+    if (poster) poster.src = song.poster;
+    if (title) title.innerHTML = song.songName;
 
-            // Update title in master play section
-            let songTitles = songs.filter((els) => {
-                return els.id == index;
-            });
-
-            songTitles.forEach(elss => {
-                let { songName } = elss;
-                if (title) title.innerHTML = songName;
-            });
-        });
-    });
+    currentTime = 0;
+    totalDuration = Math.floor(Math.random() * 180) + 120;
+    updateProgressBar();
+    updateTimeDisplays();
 }
 
 // Initialize follow button functionality
@@ -515,20 +414,6 @@ function initializeSliderAccessibility() {
 
 // Browser-specific code execution
 if (typeof document !== 'undefined') {
-    // AUDIO EVENT LISTENERS - COMMENTED OUT FOR GITHUB PAGES
-    // Uncomment these if you add actual audio files
-    /*
-    // Listen for music events
-    music.addEventListener('ended', () => {
-        isCurrentlyPlaying = false;
-        updatePauseUI();
-    });
-
-    music.addEventListener('error', () => {
-        console.log('Audio file not found - continuing in visual mode');
-    });
-    */
-
     // Progress Bar Functionality (Visual Simulation)
     let seek = document.getElementById('seek');
     let bar2 = document.getElementById('bar2');
@@ -611,13 +496,7 @@ function updateTimeDisplays() {
 
 // Initialize player
 function initializePlayer() {
-    currentTime = 0;
-    updateProgressBar();
-    updateTimeDisplays();
-    
-    // Set random duration for variety (2-5 minutes)
-    totalDuration = Math.floor(Math.random() * 180) + 120; // 2-5 minutes
-    updateTimeDisplays();
+    loadSong(songs[0]);
 }
 
 // Volume Control Functionality (Visual Only)
@@ -691,38 +570,3 @@ function updateVolumeIcon(volume) {
 updateVolumeIcon(vol_control ? vol_control.value : 30);
 
 } // End of browser-specific code
-
-/*
-=============================================================================
-FUTURE USE INSTRUCTIONS:
-=============================================================================
-
-TO ENABLE AUDIO FUNCTIONALITY:
-1. Create an 'audio/' folder in your project root
-2. Add MP3 files named 1.mp3, 2.mp3, 3.mp3, etc.
-3. Uncomment the audio creation code at the top (lines ~4-16)
-4. Uncomment the audio event listeners (lines ~350-360)
-5. Replace the mock music object with the real Audio object
-
-TO ENABLE SERVER FUNCTIONALITY:
-1. Create package.json with Express dependency:
-   {
-     "name": "msw-music-website",
-     "version": "1.0.0", 
-     "main": "script.js",
-     "scripts": {
-       "start": "node script.js",
-       "dev": "nodemon script.js"
-     },
-     "dependencies": {
-       "express": "^4.18.2"
-     }
-   }
-2. Run: npm install
-3. Uncomment the entire serverConfig section (lines ~30-80)
-4. Uncomment server initialization (lines ~82-85)
-5. Run with: npm start
-
-CURRENT STATE: GitHub Pages Compatible - Visual Music Player Demo
-=============================================================================
-*/
