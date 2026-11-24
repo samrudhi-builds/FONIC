@@ -7,153 +7,6 @@ let totalDuration = 180; // 3 minutes default duration
 let playbackInterval;
 let playbackSpeed = 1000; // Update every 1 second
 
-const songs = [
-    {
-        id: 1,
-        songName: `Animals<br>
-        <div class="subtitle">Martin Garrix</div>`,
-        poster: "img/Music/1.png"
-    },
-    {
-        id: 2,
-        songName: `Bella Ciao<br>
-        <div class="subtitle">Bella Ciao</div>`,
-        poster: "img/Music/2.png"
-    },
-    {
-        id: 3,
-        songName: `On My Way<br>
-        <div class="subtitle">Arijit Singh</div>`,
-        poster: "img/Music/3.png"
-    },
-    {
-        id: 4,
-        songName: `On My Way<br>
-        <div class="subtitle">Arijit Singh</div>`,
-        poster: "img/Music/4.png"
-    },
-    {
-        id: 5,
-        songName: `Goosebumps<br>
-        <div class="subtitle">HVME</div>`,
-        poster: "img/Music/5.jpg"
-    },
-    {
-        id: 6,
-        songName: `On My Way<br>
-        <div class="subtitle">Arijit Singh</div>`,
-        poster: "img/Music/6.jpeg"
-    },
-    {
-        id: 7,
-        songName: `In My Mind<br>
-        <div class="subtitle">Dynoro & Gigi D'agostino</div>`,
-        poster: "img/Music/7.jpeg"
-    },
-    {
-        id: 8,
-        songName: `Light it up<br>
-        <div class="subtitle">Taylor Swift</div> `,
-        poster: "img/Music/8.jpeg"
-    },
-    {
-        id: 9,
-        songName: `Light it up<br>
-        <div class="subtitle">Taylor Swift</div> `,
-        poster: "img/Music/9.jpg"
-    },
-    {
-        id: 10,
-        songName: `Light it up<br>
-        <div class="subtitle">Taylor Swift</div> `,
-        poster: "img/Music/10.png"
-    },
-    {
-        id: 11,
-        songName: `Light it up<br>
-        <div class="subtitle">Taylor Swift</div> `,
-        poster: "img/Music/11.png"
-    },
-    {
-        id: 12,
-        songName: `Light it up<br>
-        <div class="subtitle">Taylor Swift</div> `,
-        poster: "img/Music/1.png"
-    },
-    {
-        id: 13,
-        songName: `Light it up<br>
-        <div class="subtitle">Robin Hustin x TobiMorrow</div> `,
-        poster: "img/Music/1.png"
-    },
-    {
-        id: 14,
-        songName: `Light it up<br>
-        <div class="subtitle">Robin Hustin x TobiMorrow</div> `,
-        poster: "img/Music/2.png"
-    },
-    {
-        id: 15,
-        songName: `Light it up<br>
-        <div class="subtitle">Robin Hustin x TobiMorrow</div> `,
-        poster: "img/Music/3.png"
-    },
-    {
-        id: 16,
-        songName: `Light it up<br>
-        <div class="subtitle">Robin Hustin x TobiMorrow</div> `,
-        poster: "img/Music/4.png"
-    },
-    {
-        id: 17,
-        songName: `Light it up<br>
-        <div class="subtitle">Robin Hustin x TobiMorrow</div> `,
-        poster: "img/Music/5.jpg"
-    },
-    {
-        id: 18,
-        songName: `Light it up<br>
-        <div class="subtitle">Robin Hustin x TobiMorrow</div> `,
-        poster: "img/Music/6.jpeg"
-    },
-    {
-        id: 19,
-        songName: `Light it up<br>
-        <div class="subtitle">Robin Hustin x TobiMorrow</div> `,
-        poster: "img/Music/7.jpeg"
-    },
-    {
-        id: 20,
-        songName: `Light it up<br>
-        <div class="subtitle">Robin Hustin x TobiMorrow</div> `,
-        poster: "img/Music/8.jpeg"
-    },
-    {
-        id: 21,
-        songName: `Light it up<br>
-        <div class="subtitle">Robin Hustin x TobiMorrow</div> `,
-        poster: "img/Music/9.jpg"
-    },
-    {
-        id: 22,
-        songName: `Light it up<br>
-        <div class="subtitle">Robin Hustin x TobiMorrow</div> `,
-        poster: "img/Music/10.png"
-    },
-    {
-        id: 23,
-        songName: `Light it up<br>
-        <div class="subtitle">Robin Hustin x TobiMorrow</div> `,
-        poster: "img/Music/11.png"
-    },
-    {
-        id: 24,
-        songName: `Light it up<br>
-        <div class="subtitle">Robin Hustin x TobiMorrow</div> `,
-        poster: "img/Music/1.png"
-    },
-];
-
 // Initialize song items with poster and song name when DOM is ready
 // Browser environment only
 if (typeof document !== 'undefined') {
@@ -165,28 +18,18 @@ if (typeof document !== 'undefined') {
 
 // Initialize song items with poster and song name
 function initializeSongItems() {
-    document.querySelectorAll('.songItem').forEach((card, index) => {
-        const song = songs[index];
-        if (!song) return;
-
-        const image = card.querySelector('img');
+    document.querySelectorAll('.songItem').forEach((card) => {
         const heading = card.querySelector('h5');
-        if (image) {
-            image.src = song.poster;
-            image.alt = '';
-        }
-        if (heading) heading.innerHTML = song.songName;
-
         const playIcon = card.querySelector('.playListPlay');
-        if (!playIcon) return;
+        if (!heading || !playIcon) return;
 
         playIcon.setAttribute('role', 'button');
         playIcon.tabIndex = 0;
-        const label = heading ? heading.textContent.trim().replace(/\s+/g, ' ') : 'track';
+        const label = heading.textContent.trim().replace(/\s+/g, ' ');
         playIcon.setAttribute('aria-label', 'Play ' + label);
         playIcon.addEventListener('click', () => {
             pauseMusic();
-            loadSong(song);
+            loadSong(card);
             startMusic();
         });
         playIcon.addEventListener('keydown', (event) => {
@@ -362,11 +205,13 @@ function initializeScrollFunctionality() {
 }
 
 // Use the same track details in the player and on the song card.
-function loadSong(song) {
+function loadSong(card) {
+    const cover = card.querySelector('img');
+    const heading = card.querySelector('h5');
     const poster = document.getElementById('poster_master_play');
     const title = document.getElementById('title');
-    if (poster) poster.src = song.poster;
-    if (title) title.innerHTML = song.songName;
+    if (poster && cover) poster.src = cover.src;
+    if (title && heading) title.replaceChildren(...heading.cloneNode(true).childNodes);
 
     currentTime = 0;
     totalDuration = Math.floor(Math.random() * 180) + 120;
@@ -496,7 +341,8 @@ function updateTimeDisplays() {
 
 // Initialize player
 function initializePlayer() {
-    loadSong(songs[0]);
+    const firstCard = document.querySelector('.songItem');
+    if (firstCard) loadSong(firstCard);
 }
 
 // Volume Control Functionality (Visual Only)
