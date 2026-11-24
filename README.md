@@ -13,7 +13,7 @@ The project focuses on creating a visually appealing and interactive music playe
 - **Responsive Layout**: Mobile-first design ensuring compatibility across all devices
 - **Playlist**: Select a song to load its title and artwork in the simulated player
 - **Song Library**: Organized collection of songs with metadata and artwork
-- **Artist Profiles**: Featured artists section with professional imagery
+- **Artist Profiles**: Featured fictional artists with custom initials
 - **Search and navigation mockups**: Display-only elements in the demo
 - **Dynamic Content**: Horizontal scrolling carousels for songs and artists
 
@@ -31,7 +31,7 @@ The project focuses on creating a visually appealing and interactive music playe
 
 ## Run Locally
 
-Open `index.html` in a browser from the project folder. Bootstrap Icons and Google Fonts load from their public CDNs.
+Open `index.html` in a browser from the project folder. Bootstrap Icons, Google Fonts, and the cover photos load from their public hosts.
  
 ## Learning Outcomes
 
@@ -50,8 +50,12 @@ The project serves as a UI/UX demonstration and frontend development showcase.
 
 Developed under the guidance of Prof.Pragya Gupta as part of the in-house internship at K. J. Somaiya College of Engineering, Department of Information Technology.
 
+## Artwork and demo content
+
+Track and artist names are fictional. Playback is simulated. The cover images come from the European Southern Observatory and its contributors under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) and are cropped for display. The [live artwork credits](https://samrudhi-builds.github.io/FONIC/#artwork-credits) give the source and credit for every cover.
+
 ## License
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This project is open-source under the terms of the MIT License. See the [LICENSE](LICENSE.md) file for details.
+The FONIC source code is available under the MIT License. See the [LICENSE](LICENSE.md) file for details.
