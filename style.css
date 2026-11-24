@@ -486,50 +486,29 @@ container .menu_side .menu_song li .bi{
     left: 0;
     border-radius: 20px;
 }
-.song_side nav .search{
-    position: relative;
-    width: 40%;
-    padding: 1px 10px;
-    border-radius: 20px;
-    color: gray;
+.song_side nav .search {
+    display: flex;
+    align-items: center;
+    width: min(240px, 100%);
+    margin-inline-start: auto;
+    color: #b7acc6;
 }
-.song_side nav .search::before{
-    content: '';
-    position: relative;
-    width: 100%;
-    height: 100%;
-    /*background: rgb(184, 184, 184,.1);*/
-    background: rgba(137, 94, 200, 0.714);
-    border-radius: 20px;
-    backdrop-filter: blur(5px);
-    z-index: -1;
-}
-.song_side nav .search .bi{
+
+.song_side nav .search .bi {
+    flex: none;
     font-size: 13px;
-    padding: 3px 0px 0px 10px;
 }
-.song_side nav .search input{
+
+.song_side nav .search input {
+    width: 100%;
+    min-width: 0;
     background: none;
-    outline: none;
     border: none;
-    padding: 0px 10px;
+    padding: 6px 0 6px 10px;
     color: #fff;
     font-size: 12px;
 }
-.song_side nav .user{
-    position: relative;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    cursor: pointer;
-}
-.song_side nav .user img{
-    position: relative;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    box-shadow: 2px 2px 8px #131312;
-}
+
 .song_side .content{
     width: 90%;
     height: 30%;
@@ -940,17 +919,6 @@ container .menu_side .menu_song::-webkit-scrollbar-thumb:hover {
         background: none;
     }
 
-    .song_side nav .search {
-        display: flex;
-        flex: 1;
-        align-items: center;
-        min-width: 0;
-    }
-
-    .song_side nav .search input {
-        width: 100%;
-        min-width: 0;
-    }
 
     .master_play {
         display: grid;
